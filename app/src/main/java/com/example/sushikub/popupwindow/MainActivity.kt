@@ -13,14 +13,16 @@ class MainActivity : AppCompatActivity() {
 
         popup_container.setOnClickListener {
             popUp = PopUp(this)
-            if (popUp.isShowing) {
-                popUp.dismiss()
-            }
             showPopUp(popUp)
         }
     }
 
     private fun showPopUp(popUp: PopUp) {
-        popUp.show()
+        if (popUp.isShowing) {
+            popUp.dismiss()
+            popUp.show(contact_button)
+        } else {
+            popUp.show(contact_button)
+        }
     }
 }

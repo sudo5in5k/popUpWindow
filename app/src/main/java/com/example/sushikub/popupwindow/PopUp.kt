@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
+import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.Toast
 import kotlinx.android.synthetic.main.popup_layout.view.*
@@ -12,16 +14,17 @@ import kotlinx.android.synthetic.main.popup_layout.view.*
 class PopUp(private val context: Context) : PopupWindow() {
 
     private val layoutInflater = LayoutInflater.from(context)
+
     init {
         contentView = layoutInflater.inflate(R.layout.popup_layout, null)
-        width = 500
-        height = 500
+        contentView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+        width = WindowManager.LayoutParams.WRAP_CONTENT
+        height = WindowManager.LayoutParams.WRAP_CONTENT
         isOutsideTouchable = true
         isFocusable = true
-        setBackgroundDrawable(context.getDrawable(R.drawable.popup_background))
 
         // Button
-        contentView.close_button.setOnClickListener {
+        contentView.popup.setOnClickListener {
             dismiss()
         }
 
@@ -31,7 +34,18 @@ class PopUp(private val context: Context) : PopupWindow() {
     }
 
 
-    fun show() {
-        showAtLocation(contentView, Gravity.CENTER, 0, 0)
+    fun show(anchorView: View) {
+        showAsDropDown(anchorView, anchorView.measuredWidth / 4,
+                -anchorView.measuredHeight - calcNavHeight(), Gravity.NO_GRAVITY)
+    }
+
+    private fun calcNavHeight(): Int {
+        val resource = context.resources
+        val resourceId = resource.getIdentifier("navigation_bar_height", "dimen", "android")
+        return if (resourceId > 0) {
+            resource.getDimensionPixelOffset(resourceId)
+        } else {
+            0
+        }
     }
 }
