@@ -23,7 +23,6 @@ class PopUp(private val context: Context) : PopupWindow() {
         isOutsideTouchable = true
         isFocusable = true
 
-        // Button
         contentView.popup.setOnClickListener {
             dismiss()
         }
@@ -32,7 +31,6 @@ class PopUp(private val context: Context) : PopupWindow() {
             Toast.makeText(context, "Popup closed", Toast.LENGTH_SHORT).show()
         }
     }
-
 
     fun show(anchorView: View) {
         showAsDropDown(anchorView, anchorView.measuredWidth / 4,
